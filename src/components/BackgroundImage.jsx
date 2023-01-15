@@ -1,5 +1,5 @@
-import React from 'react'
-import background from "../assets/rotate-head.gif"
+import React from 'react';
+import background from "../assets/rotate-head.gif";
 import styled from 'styled-components'
 export default function BackgroundImage() {
   return (

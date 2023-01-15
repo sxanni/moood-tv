@@ -96,7 +96,7 @@ const Container = styled.div`
       gap: 2rem;
       .brand {
         img {
-          height: 4rem;
+          height: 3.2rem;
         }
       }
       .links {
@@ -107,8 +107,13 @@ const Container = styled.div`
             color: white;
             text-decoration: none;
           }
+          a:hover{
+            color: #f34242;
         }
+        }
+
       }
+      
     }
     .right {
       gap: 1rem;
