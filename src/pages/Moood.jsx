@@ -60,34 +60,37 @@ const Container = styled.div`
     }
     .container {
       position: absolute;
-    }
-    bottom: 5rem;
-    .logo {
-      width: 100%;
-      height: 100%;
-      margin-left: 5rem;
-    }
-  }
-  .buttons {
-    margin: 5rem;
-    gap: 2rem;
-    button {
-      font-size: 1.4rem;
-      gap: 1rem;
-      border-radius: 0.2rem;
-      padding: 0.5rem;
-      padding-left: 2rem;
-      padding-right: 2.4rem;
-      cursor: pointer;
-      transition: 0.2s ease-in-out;
-      &:hover {
-        opacity: 0.7;
+      bottom: 5rem;
+      .logo {
+        img {
+          width: 100%;
+          height: 100%;
+          margin-left: 5rem;
+        }
       }
-      &:nth-of-type(2) {
-        background-color: rgba(109, 109, 110, 0.7);
-        color: #fff;
-        svg {
-          font-size: 1.8rem;
+    
+      .buttons {
+        margin: 5rem;
+        gap: 2rem;
+        button {
+          font-size: 1.4rem;
+          gap: 1rem;
+          border-radius: 0.2rem;
+          padding: 0.5rem;
+          padding-left: 2rem;
+          padding-right: 2.4rem;
+          cursor: pointer;
+          transition: 0.2s ease-in-out;
+          &:hover {
+            opacity: 0.7;
+          }
+          &:nth-of-type(2) {
+            background-color: rgba(109, 109, 110, 0.7);
+            color: #fff;
+            svg {
+              font-size: 1.8rem;
+            }
+          }
         }
       }
     }
