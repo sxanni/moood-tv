@@ -1,20 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { useNavigate } from "react-router-dom";
+import Slider from "../components/Slider";
 import styled from "styled-components";
 import backgroundImage from "../assets/home.jpg";
 import movieLogo from "../assets/homeTitle.webp";
 import { FaPlay } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchMovies, getGenres } from "../store";
 
 export default function Moood() {
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
 
+  //call code to load genres code from store/index.js
+  const genresLoaded = useSelector((state) => state.moood.genresLoaded);
+  const  movies  = useSelector((state) => state.moood.movies);
+  // console.log(movies);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getGenres());
+    // to run this on the first render of component only once, insert below=> ' ,[] '
+  }, []);
+
+  useEffect(() => {
+    // check if genres are loaded, then we dispatch the fetchMovies method with prop type of "all"
+    if (genresLoaded) dispatch(fetchMovies({ type: "all" }));
+  });
+
+  // useEffect(() => {
+  //   dispatch(fetchMovies({ type: "movie" }));
+  // }, [dispatch]);
+
+  // useEffect(() => {
+  // }, [movies]);
+
   window.onscroll = () => {
     setIsScrolled(window.pageYOffset === 0 ? false : true);
+
     return () => (window.onscroll = null);
   };
+  //checking that movies var holds api data in console
+  // console.log(movies);
   return (
     <Container>
       <Navbar isScrolled={isScrolled} />
@@ -43,9 +73,12 @@ export default function Moood() {
           </div>
         </div>
       </div>
+      <Slider movies={movies} />
     </Container>
   );
 }
+
+
 
 const Container = styled.div`
   background-color: black;
@@ -68,7 +101,7 @@ const Container = styled.div`
           margin-left: 5rem;
         }
       }
-    
+
       .buttons {
         margin: 5rem;
         gap: 2rem;
@@ -76,6 +109,7 @@ const Container = styled.div`
           font-size: 1.4rem;
           gap: 1rem;
           border-radius: 0.2rem;
+          border: none;
           padding: 0.5rem;
           padding-left: 2rem;
           padding-right: 2.4rem;
@@ -87,6 +121,7 @@ const Container = styled.div`
           &:nth-of-type(2) {
             background-color: rgba(109, 109, 110, 0.7);
             color: #fff;
+            border: solid 1px;
             svg {
               font-size: 1.8rem;
             }

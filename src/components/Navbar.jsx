@@ -34,9 +34,9 @@ export default function Navbar({ isScrolled }) {
             <img src={logo} alt="logo" />
           </div>
           <ul className="links flex">
-            {links.map(({ name, to }) => {
+            {links.map(({ name, to, id }) => {
               return (
-                <li key={name.id}>
+                <li key={id}>
                   <Link to={to}> {name} </Link>
                 </li>
               );
