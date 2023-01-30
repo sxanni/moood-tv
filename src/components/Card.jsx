@@ -8,7 +8,8 @@ import { BsCheck } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BiChevronDown } from "react-icons/bi";
 
-function Card({ movieData, isLiked = false }) {
+export default React.memo(
+  function Card({ movieData, isLiked = false }) {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
   return (
@@ -72,7 +73,7 @@ function Card({ movieData, isLiked = false }) {
       )}
     </Container>
   );
-}
+});
 
 const Container = styled.div`
   max-width: 230px;
@@ -93,6 +94,7 @@ const Container = styled.div`
     position: absolute;
     top: -18vh;
     left: 0;
+    border: 2px solid white;
     border-radius: 0.3rem;
     box-shadow: rgba(o, o, o, o.75) opx 3px 10px;
     background-color: #181818;
@@ -151,4 +153,4 @@ const Container = styled.div`
   }
 `;
 
-export default Card;
+// export default Card;

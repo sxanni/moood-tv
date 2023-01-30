@@ -67,8 +67,10 @@ const getRawData = async (api, genres, paging) => {
       `${api}${paging ? `&page=${i}` : ""}`
       );
     createArrayFromRawData(results, moviesArray, genres);
-    return moviesArray;
   }
+  return moviesArray;
+  //the above was 1 curly brace up in the code and this led to a bug where only 20 movies were being shown. Return should be outside the for loop.
+  // console.log(moviesArray);
 };
 
 // create function to fetch movies
