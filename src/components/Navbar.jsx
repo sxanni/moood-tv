@@ -11,6 +11,7 @@ export default function Navbar({ isScrolled }) {
   //   links that are gonna be on nav bar, deconstructed into objects of name and link
   const links = [
     { id: "1", name: "Home", to: "/" },
+    //remembder moods here leads to Movies.js, and the switch takes place in app.jsx
     { id: "2", name: "Moods", to: "/moods" },
     { id: "3", name: "Gallery", to: "/gallery" },
     { id: "4", name: "My List", to: "/mylist" },

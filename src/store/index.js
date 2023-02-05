@@ -97,6 +97,32 @@ export const fetchMovies = createAsyncThunk(
 );
 // return getRawData(`${TMBD_BASE_URL}/discover/${type}?api_key=${API_KEY}&with_genres=${genre}`)
 
+// create function to fetch movies
+
+export const fetchDataByGenre = createAsyncThunk(
+  "moood/moviesByGenre",
+  async ({genre, type }, thunkApi) => {
+    console.log("in fetch data", genre, type)
+     // get the current state to access the genres
+    const {
+      moood: { genres },
+    } = thunkApi.getState();
+    //call getrawdata and pass the API into it, the following appends after api get the trending url by the type,(movies,tv etc), we want t he trending by the week and ythen pass genres after.
+    // const movies = await getRawData(
+    const data = getRawData(
+    // return getRawData(
+      `${TMDB_BASE_URL}/discover/${type}?api_key=${API_KEY}&with_genres=${genre}`,
+      genres
+      );
+      // console.log(data);
+      return data;
+      //// dispatch an action to update the state with the new movies
+      // thunkApi.dispatch(updateMovies(movies));
+      
+  }
+);
+// return getRawData(`${TMBD_BASE_URL}/discover/${type}?api_key=${API_KEY}&with_genres=${genre}`)
+
 const MooodSlice = createSlice({
   name: "Moood",
   initialState,
@@ -118,9 +144,11 @@ const MooodSlice = createSlice({
     //   state.genresLoaded = false;
     // })
    
-   
     // got movies builder function and add a fulfilled state, if fulfiled and stores in our redux store
     builder.addCase(fetchMovies.fulfilled, (state, action) => {
+      state.movies = action.payload;
+    });
+    builder.addCase(fetchDataByGenre.fulfilled, (state, action) => {
       state.movies = action.payload;
     });
   },

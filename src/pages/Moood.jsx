@@ -29,7 +29,7 @@ export default function Moood() {
   useEffect(() => {
     // check if genres are loaded, then we dispatch the fetchMovies method with prop type of "all"
     if (genresLoaded) dispatch(fetchMovies({ type: "all" }));
-  });
+  }, [genresLoaded]);
 
   // useEffect(() => {
   //   dispatch(fetchMovies({ type: "movie" }));
