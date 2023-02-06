@@ -7,7 +7,7 @@ import { API_KEY } from "../utils/constants";
 import { TMDB_BASE_URL } from "../utils/constants";
 import axios from "axios";
 
- export const initialState = {
+export const initialState = {
   movies: [],
   genresLoaded: false,
   //   empty array below wil hold gebnres fetched by api
@@ -27,7 +27,7 @@ export const getGenres = createAsyncThunk("moood/genres", async () => {
 // array to hold raw data
 const createArrayFromRawData = (array, moviesArray, genres) => {
   // console.log(array);
-  
+
   // --this console shows raw data from api
   // for each movie object in the array
   array.forEach((movie) => {
@@ -63,9 +63,7 @@ const getRawData = async (api, genres, paging) => {
     // ---------------------------------------
     const {
       data: { results },
-    } = await axios.get(
-      `${api}${paging ? `&page=${i}` : ""}`
-      );
+    } = await axios.get(`${api}${paging ? `&page=${i}` : ""}`);
     createArrayFromRawData(results, moviesArray, genres);
   }
   return moviesArray;
@@ -78,7 +76,7 @@ const getRawData = async (api, genres, paging) => {
 export const fetchMovies = createAsyncThunk(
   "moood/trending",
   async ({ type }, thunkApi) => {
-     // get the current state to access the genres
+    // get the current state to access the genres
     const {
       moood: { genres },
     } = thunkApi.getState();
@@ -88,11 +86,10 @@ export const fetchMovies = createAsyncThunk(
       `${TMDB_BASE_URL}/trending/${type}/week?api_key=${API_KEY}`,
       genres,
       true
-      );
-      console.log(movies);
-      //// dispatch an action to update the state with the new movies
-      // thunkApi.dispatch(updateMovies(movies));
-      
+    );
+    console.log(movies);
+    //// dispatch an action to update the state with the new movies
+    // thunkApi.dispatch(updateMovies(movies));
   }
 );
 // return getRawData(`${TMBD_BASE_URL}/discover/${type}?api_key=${API_KEY}&with_genres=${genre}`)
@@ -101,26 +98,48 @@ export const fetchMovies = createAsyncThunk(
 
 export const fetchDataByGenre = createAsyncThunk(
   "moood/moviesByGenre",
-  async ({genre, type }, thunkApi) => {
-    console.log("in fetch data", genre, type)
-     // get the current state to access the genres
+  async ({ genre, type }, thunkApi) => {
+    console.log("in fetch data", genre, type);
+    // get the current state to access the genres
     const {
       moood: { genres },
     } = thunkApi.getState();
     //call getrawdata and pass the API into it, the following appends after api get the trending url by the type,(movies,tv etc), we want t he trending by the week and ythen pass genres after.
     // const movies = await getRawData(
     const data = getRawData(
-    // return getRawData(
+      // return getRawData(
       `${TMDB_BASE_URL}/discover/${type}?api_key=${API_KEY}&with_genres=${genre}`,
       genres
-      );
-      // console.log(data);
-      return data;
-      //// dispatch an action to update the state with the new movies
-      // thunkApi.dispatch(updateMovies(movies));
-      
+    );
+    // console.log(data);
+    return data;
+    //// dispatch an action to update the state with the new movies
+    // thunkApi.dispatch(updateMovies(movies));
   }
 );
+
+export const getUserLikedMovies = createAsyncThunk(
+  "moood/getLiked",
+  async (email) => {
+    const {
+      data: { movies },
+    } = await axios.get(`http://localhost:5000/api/user/liked/${email}`);
+    return movies;
+  }
+);
+export const removeFromLikedMovies = createAsyncThunk(
+  "moood/deleteLiked",
+  async ({email,movieId}) => {
+    const {
+      data: { movies },
+    } = await axios.put(`http://localhost:5000/api/user/delete`, {
+      email,
+      movieId,
+    });
+    return movies;
+  }
+);
+
 // return getRawData(`${TMBD_BASE_URL}/discover/${type}?api_key=${API_KEY}&with_genres=${genre}`)
 
 const MooodSlice = createSlice({
@@ -139,11 +158,11 @@ const MooodSlice = createSlice({
       state.genres = action.payload;
       state.genresLoaded = true;
     });
-     //// when the getGenres thunk is pending, set the genresLoaded state to false
+    //// when the getGenres thunk is pending, set the genresLoaded state to false
     //  builder.addCase(getGenres.pending, (state) => {
     //   state.genresLoaded = false;
     // })
-   
+
     // got movies builder function and add a fulfilled state, if fulfiled and stores in our redux store
     builder.addCase(fetchMovies.fulfilled, (state, action) => {
       state.movies = action.payload;
@@ -151,12 +170,18 @@ const MooodSlice = createSlice({
     builder.addCase(fetchDataByGenre.fulfilled, (state, action) => {
       state.movies = action.payload;
     });
+    builder.addCase(getUserLikedMovies.fulfilled, (state, action) => {
+      state.movies = action.payload;
+    });
+    builder.addCase(removeFromLikedMovies.fulfilled, (state, action) => {
+      state.movies = action.payload;
+    });
   },
 });
 
 export const store = configureStore({
   reducer: {
-    // got an error because i forgot to add 3 os to my moood: below :'(
+    // got an error because i forgot to add 3 'o's to my moood: below :'(
     moood: MooodSlice.reducer,
   },
 });

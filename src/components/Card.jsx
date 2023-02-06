@@ -4,35 +4,39 @@ import { useNavigate } from "react-router-dom";
 import video from "../assets/hypno-fireball.mp4";
 import { IoPlayCircleSharp } from "react-icons/io5";
 import { RiThumbUpFill, RiThumbDownFill } from "react-icons/ri";
-import { BsCheck } from "react-icons/bs";
+import { BsCheck, BsX} from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BiChevronDown } from "react-icons/bi";
 import axios from "axios";
 import { firebaseAuth } from "../utils/firebase-config";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { removeFromLikedMovies } from "../store";
 
-
-
-export default React.memo(
-  function Card({ movieData, isLiked = false }) {
+export default React.memo(function Card({ movieData, isLiked = false }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [email,setEmail] = useState(undefined);
+  // const [isClicked, setIsClicked] = useState(false);
+
+  const [email, setEmail] = useState(undefined);
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   onAuthStateChanged(firebaseAuth, (currentUser) => {
     if (currentUser) setEmail(currentUser.email);
-    else navigate ("/login");
-    });
+    else navigate("/login");
+  });
 
-  const addToList = async ()=> {
+  const addToList = async () => {
     try {
-      await axios.post("http://localhost:5000/api/user/add",{email,data:movieData})
+      await axios.post("http://localhost:5000/api/user/add", {
+        email,
+        data: movieData,
+      });
     } catch (err) {
-      console.log(err)
-      
+      console.log(err);
     }
-  }
-
+  };
 
   return (
     <Container
@@ -42,6 +46,7 @@ export default React.memo(
       <img
         src={`https://image.tmdb.org/t/p/w500${movieData.image}`}
         alt="movie"
+        // title={movieData.name}
       />
       {isHovered && (
         <div className="hover">
@@ -74,7 +79,14 @@ export default React.memo(
                 <RiThumbDownFill title="Dislike" />
 
                 {isLiked ? (
-                  <BsCheck title="Remove From List" />
+                  <BsX
+                    title="Remove From List"
+                    onClick={() =>
+                      dispatch(
+                        removeFromLikedMovies({ movieId: movieData.id, email })
+                      )
+                    }
+                  />
                 ) : (
                   <AiOutlinePlus title="Add to my list" onClick={addToList} />
                 )}

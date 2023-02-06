@@ -8,6 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+//connect to mongoDB
 mongoose
   .connect("mongodb://127.0.0.1:27017/moood", {
     // useNewUrlParsel: true,
